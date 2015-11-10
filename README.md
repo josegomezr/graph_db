@@ -174,15 +174,15 @@ dbsettings = {
     'port': 2480
 }
 
-orientFactory = graph_db.Factory('orientdb', dbsettings)
-orientFactory.Driver.connect()
+driver = graph_db.Factory('orientdb', dbsettings)
 
-amy = orientFactory.Vertex.create('V')
-victor = orientFactory.Vertex.create('V')
+amy = driver.Vertex.create('V')
+victor = driver.Vertex.create('V')
 
-amigo = orientFactory.Edge.create('L', amy['result'][0]['@rid'], victor['result'][0]['@rid'])
+amigo = driver.Edge.create('L', amy[0]['@rid'], victor[0]['@rid'])
 
-print amy.get('result'), victor.get('result'), amigo.get('result')
+print (amy, victor, amigo)
 
-orientFactory.Driver.disconnect()
+driver.Driver.disconnect()
+
 ```
