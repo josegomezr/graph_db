@@ -9,7 +9,7 @@ El proyecto se encuentra en estado ALPHA y puede cambiar bruscamente.
 ## Caso de estudio
 Consideremos el grafo siguiente:
 
-![(Amy)-[Amigo]->(Victor)](https://raw.github.com/josegomezr/graphdb/master/img/grafo-prueba.png)
+![(Amy)-[Amigo]->(Victor)](https://raw.githubusercontent.com/josegomezr/graph_db/master/img/grafo-prueba.png)
 
 Que puede ser representado de la siguiente manera:
 
