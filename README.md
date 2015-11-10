@@ -43,7 +43,7 @@ CREATE CLASS L EXTENDS E
 # Datos 
 CREATE VERTEX V # asumiendo que @rid resulta #9:0
 CREATE VERTEX V # asumiendo que @rid resulta #9:1
-CREATE EDGE L FROM #9:0 TO #9:1 #11:0
+CREATE EDGE L FROM #9:0 TO #9:1 # asumiento que @rid resulta #11:0
 # consulta
 SELECT * FROM #11:0 # con fetchPlan = *:1
 ```
