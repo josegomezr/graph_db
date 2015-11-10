@@ -24,8 +24,9 @@ Que puede ser representado de la siguiente manera:
 |--------------:|:--------------|
 |**id:**        |`3`            |
 |**dataset:**   |`{}`           |
-|**out_C:**     |`[2]`          |
 |**type:**      |`L`            |
+|**origin:**    |`1`            |
+|**destiny:**   |`2`            |
 
 |    Vertex:    |     Victor    |
 |--------------:|:--------------|
