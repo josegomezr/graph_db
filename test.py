@@ -3,8 +3,8 @@ import graph_db
 dbsettings = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'veca3150',
-    'name': 'diggi-v1',
+    'password': '123456',
+    'name': 'testdb',
     'port': 2480
 }
 
