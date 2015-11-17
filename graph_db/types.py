@@ -1,3 +1,6 @@
+class GraphDBException(Exception):
+    pass
+        
 class BaseDriver():
     _connected = False
     _settings = {}
@@ -53,3 +56,32 @@ class Map(dict):
     def __delitem__(self, key):
         super(Map, self).__delitem__(key)
         del self.__dict__[key]
+
+class List(list):
+    def take(self, count, offset=0):
+        return self[count:count+offset]
+    def take(self, count, offset=0):
+        return self[count:count+offset]
+    def first(self):
+        return self[0]
+    def last(self):
+        return self[-1]
+    def flatten(self):
+        newItems = self.__class__()
+        for item in self:
+            if isinstance(item, List):
+                newItems.extend(item.flatten())
+            else:
+                newItems.append(item)
+        return newItems
+    def filter(self, filteringLambda):
+        newList = List()
+        for item in self:
+            filtered = None
+            if isinstance(item, List):
+                filtered = item.where(filteringLambda)
+            elif filteringLambda(item):
+                filtered = item
+            if filtered is not None:
+                newList.append(filtered)
+        return newList

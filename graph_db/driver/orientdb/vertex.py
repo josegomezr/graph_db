@@ -1,3 +1,4 @@
+from . import result
 
 class Vertex(object):
     def __init__(self, driver):
@@ -7,8 +8,9 @@ class Vertex(object):
         SQL = "CREATE VERTEX " + typeClass
         if data is not None:
             SQL += " CONTENT " + json.dumps(data)
-        result = self.driver.query(SQL)
-        return result
+        response = self.driver.query(SQL)
+        res = result.Result(response[0])
+        return res
     
     def update(self, typeClass, data, criteria):
         if type(data) is not dict:
@@ -17,8 +19,8 @@ class Vertex(object):
         SQL = "UPDATE " + typeClass + " SET " + str(utils.dictToUpdate(data))
         if type(criteria) is dict:
             SQL = SQL + " WHERE " + utils.dictToWhere(criteria)
-        result = self.driver.query(SQL)
-        return result
+        response = self.driver.query(SQL)
+        return response
 
     def search(self, typeClass, query = None):
         if query is None:
@@ -35,15 +37,16 @@ class Vertex(object):
                     first = False
                 SQL += "any().toLowerCase() LIKE '%" + word.lower() + "%'"
 
-        result = self.driver.query(SQL, 2)
-        return result
+        response = self.driver.query(SQL, 2)
+        res = result.Result(response)
+        return res
     
     def delete(self, criteria):
         SQL = "DELETE VERTEX"
         if type(criteria) is dict:
             SQL = SQL + " WHERE " + utils.dictToWhere(criteria)
-        result = self.driver.query(SQL)
-        return result
+        response = self.driver.query(SQL)
+        return response
 
     def find(self, typeClass, criteria = None, depth = 0):
         sql = "SELECT * FROM %s" % (typeClass)
@@ -55,6 +58,7 @@ class Vertex(object):
                 if n > 0:
                     n = n - 1
                     sql += " AND "
-        result = self.driver.query(sql, depth=depth)
+        response = self.driver.query(sql, depth=depth)
 
-        return result
+        res = result.Result(response)
+        return res

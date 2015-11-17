@@ -1,9 +1,10 @@
+from ... import types
 
-class OrientDBException(Exception):
+class OrientDBException(types.GraphDBException):
     pass
 
-class OrientDBConnectionError(Exception):
+class OrientDBConnectionError(types.GraphDBException):
     pass
 
-class OrientDBQueryError(Exception):
+class OrientDBQueryError(types.GraphDBException):
     pass

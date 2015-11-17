@@ -18,11 +18,20 @@ class OrientDBDriver(types.BaseDriver):
     def connect(self):
         if self._connected:
             return
+        url = '%(base_url)s/connect/%(db_name)s/sql/-' % ({
+            'base_url': self._settings['url']
+            'db_name': self._settings['name']
+        })
         try:
-            response = requests.get(self._settings['url'] + '/connect/' + self._settings['name'], auth=self._auth)
+            response = requests.get(url, auth=self._auth)
             if response.status_code == 401:
                 raise exceptions.OrientDBConnectionError("Invalid Credentials")
-            response = requests.get(self._settings['url'] + '/database/' + self._settings['name'], auth=self._auth)
+
+            url = '%(base_url)s/database/%(db_name)s/sql/-' % ({
+                'base_url': self._settings['url']
+                'db_name': self._settings['name']
+            })
+            response = requests.get(url, auth=self._auth)
             if response.status_code == 401:
                 raise exceptions.OrientDBConnectionError("Invalid Database 401 Connection")
             self._connected = True
@@ -33,8 +42,13 @@ class OrientDBDriver(types.BaseDriver):
         if not self._connected:
             self.connect()
         depth = kwargs.get('depth', 0)
+        url = '%(base_url)s/command/%(db_name)s/sql/-' % ({
+            'base_url': self._settings['url']
+            'db_name': self._settings['name']
+        })
+        
         try:
-            response = requests.post(self._settings['url'] + '/command/' + self._settings['name'] + '/sql/-',
+            response = requests.post( url,
                 auth = self._auth, 
                 params = {
                     'format': 'rid,class,fetchPlan:*:%d' % depth
@@ -45,10 +59,10 @@ class OrientDBDriver(types.BaseDriver):
             self._connected = False
             raise exceptions.OrientDBConnectionError("invalid connection (maybe down)")
         except ValueError as e:
-            raise exceptions.OrientDBQueryError("invalid response")
+            raise exceptions.OrientDBQueryError(response.text)
             
     def disconnect(self):
         try:
             response = requests.get(self._settings['url'] + '/disconnect', auth=self._auth)
         except requests.exceptions.RequestException as e:
-            raise OrientDBConnectionError("Couldn't Disconnect to OrientDB Server", e)
+            raise exceptions.OrientDBConnectionError("Couldn't Disconnect to OrientDB Server")
