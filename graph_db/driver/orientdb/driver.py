@@ -19,7 +19,7 @@ class OrientDBDriver(types.BaseDriver):
         if self._connected:
             return
         url = '%(base_url)s/connect/%(db_name)s/sql/-' % ({
-            'base_url': self._settings['url']
+            'base_url': self._settings['url'],
             'db_name': self._settings['name']
         })
         try:
@@ -28,7 +28,7 @@ class OrientDBDriver(types.BaseDriver):
                 raise exceptions.OrientDBConnectionError("Invalid Credentials")
 
             url = '%(base_url)s/database/%(db_name)s/sql/-' % ({
-                'base_url': self._settings['url']
+                'base_url': self._settings['url'],
                 'db_name': self._settings['name']
             })
             response = requests.get(url, auth=self._auth)
@@ -43,7 +43,7 @@ class OrientDBDriver(types.BaseDriver):
             self.connect()
         depth = kwargs.get('depth', 0)
         url = '%(base_url)s/command/%(db_name)s/sql/-' % ({
-            'base_url': self._settings['url']
+            'base_url': self._settings['url'],
             'db_name': self._settings['name']
         })
         

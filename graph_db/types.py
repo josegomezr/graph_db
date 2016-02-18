@@ -58,8 +58,8 @@ class Map(dict):
         del self.__dict__[key]
 
 class List(list):
-    def take(self, count, offset=0):
-        return self[count:count+offset]
+    def size(self):
+        return len(self)
     def take(self, count, offset=0):
         return self[count:count+offset]
     def first(self):
@@ -85,3 +85,13 @@ class List(list):
             if filtered is not None:
                 newList.append(filtered)
         return newList
+
+class Result(Map):
+    def __init__(self, result):
+        super(Result, self).__init__(result)
+
+class ResultSet(List):
+    def __init__(self, resultset):
+        super(ResultSet, self).__init__(resultset)
+        for i, target in enumerate(self):
+            self[i] = Result(target)
