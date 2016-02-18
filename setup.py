@@ -10,7 +10,7 @@ long_description = '''GraphDB almacenamiento para grafos en cualquier gestor de 
 setup(
     name='graph_db',
     version=graph_db.__version__,
-    url='localhost',
+    url='http://github.com/josegomezr/graph_db',
     license='Apache Software License',
     author='José Daniel Gómez Rodríguez',
     install_requires=[
@@ -23,6 +23,9 @@ setup(
     include_package_data=True,
     platforms='any',
     keywords='graph database grafos',
+    dependency_links=[
+	    'https://github.com/josegomezr/pyqb/archive/master.zip#egg=pyqb'
+	],
     # test_suite='graph_db.test.all',
     classifiers = [
         'Programming Language :: Python',
