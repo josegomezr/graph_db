@@ -19,7 +19,7 @@ setup(
     author_email='1josegomezr@gmail.com',
     description='GraphDB almacenamiento para grafos en cualquier gestor de base de datos.',
     long_description=long_description,
-    packages=['graph_db'],
+    packages=find_packages('graph_db'),
     include_package_data=True,
     platforms='any',
     keywords='graph database grafos',
