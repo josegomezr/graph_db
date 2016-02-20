@@ -11,7 +11,7 @@ class Vertex(object):
         uid = uuid.uuid4()
         SQL.set('uuid', str(uid))
         SQL.set('suid', "%x%x" % uid.fields[0:2])
-        SQL.set('type', 'edge')
+        SQL.set('type', 'vertex')
         response = self.driver.query(SQL.result())
         res = result.Result(response[0])
         return res
