@@ -6,13 +6,14 @@ connections = types.Map()
 
 def Factory(driver, settings=None, autoConnect=False):
     driverModule = importlib.import_module('.driver.' + driver, __package__)
+    connId = "%s-%s:%s" % (driver, settings['host'], settings['port'])
 
-    if not connections.get(driver, False):
+    if not connections.get(connId, False):
         if len(settings) == 0:
             raise ValueError("db: config needed")
         currentFactory = driverModule.Factory(settings, autoConnect)
-        connections[driver] = current_connection = currentFactory
+        connections[connId] = current_connection = currentFactory
 
-    return connections[driver]
+    return connections[connId]
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'

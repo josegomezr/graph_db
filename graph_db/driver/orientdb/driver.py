@@ -36,6 +36,7 @@ class OrientDBDriver(types.BaseDriver):
                 raise exceptions.OrientDBConnectionError("Invalid Database 401 Connection")
             self._connected = True
         except requests.exceptions.RequestException as e:
+
             raise exceptions.OrientDBConnectionError("Invalid Database Connection (OrientDB may be down)")
 
     def query(self, sql, *args, **kwargs):
@@ -62,7 +63,10 @@ class OrientDBDriver(types.BaseDriver):
             raise exceptions.OrientDBQueryError(response.text)
             
     def disconnect(self):
+        if not self._connected:
+            return
         try:
             response = requests.get(self._settings['url'] + '/disconnect', auth=self._auth)
         except requests.exceptions.RequestException as e:
             raise exceptions.OrientDBConnectionError("Couldn't Disconnect to OrientDB Server")
+        self._connected = False
