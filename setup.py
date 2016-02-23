@@ -14,7 +14,8 @@ setup(
     license='Apache Software License',
     author='José Daniel Gómez Rodríguez',
     install_requires=[
-		'requests == 2.7.0'
+		'requests == 2.7.0',
+		'pqb >= 0.0.2'
 	],
     author_email='1josegomezr@gmail.com',
     description='GraphDB almacenamiento para grafos en cualquier gestor de base de datos.',
