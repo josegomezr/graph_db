@@ -17,7 +17,7 @@ class EdgeDriver(types.BaseEdgeDriver):
         SQL.set('type', 'edge')
         
         response = self.driver.query(SQL.result())
-        res = result.Result(response[0], self.driver)
+        res = result.Result(response[0])
         return res
     
     def update(self, typeClass, criteria, data):
@@ -28,7 +28,7 @@ class EdgeDriver(types.BaseEdgeDriver):
     def search(self, typeClass, query):
         SQL = pqb.Select().from_(typeClass).where('any().toLowerCase()', '%%%s%%' % query, operator='LIKE').result()
         response = self.driver.query(SQL, 2)
-        res = result.ResultSet(response, self.driver)
+        res = result.ResultSet(response)
         return res
     
     def delete(self, typeClass, criteria):
@@ -39,5 +39,5 @@ class EdgeDriver(types.BaseEdgeDriver):
     def find(self, typeClass, criteria = None, depth = 0):
         SQL = pqb.Select().from_(typeClass).where(criteria).result()
         response = self.driver.query(SQL, depth=depth)
-        res = result.ResultSet(response, self.driver)
+        res = result.ResultSet(response)
         return res

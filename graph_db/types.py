@@ -117,75 +117,11 @@ class List(list):
         return newList
 
 class Result(Map):
-    def __init__(self, result, db):
+    def __init__(self, result):
         super(Result, self).__init__(result)
-        self._db = db
-        self._type = 'edge' if bool(r.get('in', False) and r.get('out', False)) else 'vertex'
-    
-    def __edge(self, edge):
-        if isinstance(edge, str):
-            return self.db.Edge.find(edge)
-        else:
-            return Result(edge, self._db)
-
-    def __vertex(self, vertex):
-        if isinstance(vertex, str):
-            return self.db.Vertex.find(vertex)
-        else:
-            return Result(vertex, self._db)
-
-    def edgeIn(self, label):
-        if self._type != 'vertex':
-            raise Exception('no edge from edge')
-        edge = self['in_'+label]
-        return self.__edge(edge)
-
-    def edgeOut(self, label):
-        if self._type != 'vertex':
-            raise Exception('no edge from edge')
-        edge = self['out_'+label]
-        return self.__edge(edge)
-
-    def vertexIn(self):
-        if self._type == 'vertex':
-            raise Exception('no vertex from vertex')
-
-        return self.__vertex(self['in'])
-
-    def vertexOut(self):
-        if self._type == 'vertex':
-            raise Exception('no vertex from vertex')
-
-        return self.__vertex(self['out'])
 
 class ResultSet(List):
-    def __init__(self, resultset, db):
+    def __init__(self, resultset):
         super(ResultSet, self).__init__(resultset)
-        self._db = db
         for i, target in enumerate(self):
-            if isinstance(target, dict):
-                self[i] = Result(target, self._db)
-            elif isinstance(target, list):
-                self[i] = ResultSet(target, self._db)
-            else:
-                raise Exception('extrange type %s -- %s' % (type(target).__name__, target) )
-
-    def edgeIn(self, label='E'):
-        nuevo = ResultSet(self)
-        for i, target in enumerate(nuevo):
-            self[i] = target.edgeIn(label)
-
-    def edgeOut(self, label='E'):
-        nuevo = ResultSet(self)
-        for i, target in enumerate(nuevo):
-            self[i] = target.edgeOut(label)
-
-    def vertexIn(self, label='E'):
-        nuevo = ResultSet(self)
-        for i, target in enumerate(nuevo):
-            self[i] = target.vertexIn(label)
-
-    def vertexOut(self, label='E'):
-        nuevo = ResultSet(self)
-        for i, target in enumerate(nuevo):
-            self[i] = target.vertexOut(label)
+            self[i] = Result(target)
