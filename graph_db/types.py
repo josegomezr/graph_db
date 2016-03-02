@@ -160,7 +160,7 @@ class Result(Map):
 
 class ResultSet(List):
     def __init__(self, resultset, db):
-        super(ResultSet, self).__init__(resultset, db)
+        super(ResultSet, self).__init__(resultset)
         self._db = db
         for i, target in enumerate(self):
             if isinstance(target, dict):
