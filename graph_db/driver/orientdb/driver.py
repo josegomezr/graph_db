@@ -2,7 +2,7 @@ from ... import types
 from . import exceptions
 import requests
 
-class OrientDBDriver(types.BaseDriver):
+class DBDriver(types.BaseDBDriver):
     client = None
     _connected = False
     def __init__(self, autoConnect = True, settings={}):

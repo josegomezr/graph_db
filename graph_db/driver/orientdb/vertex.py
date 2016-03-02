@@ -1,11 +1,9 @@
 import pqb
 from . import result
 import uuid
+from ... import types
 
-class Vertex(object):
-    def __init__(self, driver):
-        self.driver = driver
-    
+class VertexDriver(types.BaseVertexDriver):
     def create(self, typeClass, data = None):
         SQL = pqb.Create('VERTEX').class_(typeClass).set(data)
         uid = uuid.uuid4()
@@ -13,7 +11,7 @@ class Vertex(object):
         SQL.set('suid', "%x%x" % uid.fields[0:2])
         SQL.set('type', 'vertex')
         response = self.driver.query(SQL.result())
-        res = result.Result(response[0])
+        res = result.Result(response[0], self.driver)
         return res
     
     def update(self, typeClass, criteria, data):
@@ -24,7 +22,7 @@ class Vertex(object):
     def search(self, typeClass, query):
         SQL = pqb.Select().from_(typeClass).where('any().toLowerCase()', '%%%s%%' % query, operator='LIKE').result()
         response = self.driver.query(SQL, 2)
-        res = result.ResultSet(response)
+        res = result.ResultSet(response, self.driver)
         return res
     
     def delete(self, typeClass, criteria):
@@ -35,5 +33,5 @@ class Vertex(object):
     def find(self, typeClass, criteria = None, depth = 0):
         SQL = pqb.Select().from_(typeClass).where(criteria).result()
         response = self.driver.query(SQL, depth=depth)
-        res = result.ResultSet(response)
+        res = result.ResultSet(response, self.driver)
         return res
