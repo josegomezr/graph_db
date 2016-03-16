@@ -1,18 +1,22 @@
 import graph_db
 import unittest
 
-
 class OrientDBTestCase(unittest.TestCase):
     """Orient Test Case"""
-    def test_it_should_connect(self):
-        """It should connect with no problems"""
+
+    def setUp(self):
         dbsettings = {
             'host': 'localhost',
             'user': 'root',
             'password': 'veca3150',
             'name': 'diggi-v1',
-            'port': 2480
+            'port': '2480'
         }
+        self.driver = driver = graph_db.Factory('orientdb', dbsettings)
+        
+    def test_it_should_connect(self):
+        """It should connect with no problems"""
+        
         driver = graph_db.Factory('orientdb', dbsettings)
         driver.DB.connect()
         assert driver.DB._connected == True

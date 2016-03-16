@@ -10,58 +10,60 @@ class DBDriver(types.BaseDBDriver):
         user = self._settings['user']
         password = self._settings['password']
         self._auth = requests.auth.HTTPBasicAuth(user, password)
-        self._settings['url'] = 'http://%s:%d' % (self._settings['host'], self._settings['port'])
+
+        self._settings['url'] = 'http://%s:%s' % (self._settings['host'], str(self._settings['port']))
 
         if autoConnect:
             self.connect()
 
+    def __url(self, *args):
+        segments = [self._settings['url']]
+        segments.extend( args )
+        return '/'.join( segments )
+
     def connect(self):
         if self._connected:
             return
-        url = '%(base_url)s/connect/%(db_name)s/sql/-' % ({
-            'base_url': self._settings['url'],
-            'db_name': self._settings['name']
-        })
+
         try:
+            url = self.__url('connect', self._settings['name'])
             response = requests.get(url, auth=self._auth)
             if response.status_code == 401:
                 raise exceptions.OrientDBConnectionError("Invalid Credentials")
+        except requests.exceptions.RequestException as e:
+            raise exceptions.OrientDBConnectionError("Invalid Database Connection (connect) (OrientDB may be down)")
 
-            url = '%(base_url)s/database/%(db_name)s/sql/-' % ({
-                'base_url': self._settings['url'],
-                'db_name': self._settings['name']
-            })
+    def selectDB(self):
+        try:
+            url = self.__url('database', self._settings['name'])
             response = requests.get(url, auth=self._auth)
             if response.status_code == 401:
                 raise exceptions.OrientDBConnectionError("Invalid Database 401 Connection")
             self._connected = True
         except requests.exceptions.RequestException as e:
-
-            raise exceptions.OrientDBConnectionError("Invalid Database Connection (OrientDB may be down)")
+            raise exceptions.OrientDBConnectionError("Invalid Database Connection (select-db) (OrientDB may be down)")
 
     def query(self, sql, *args, **kwargs):
         if not self._connected:
             self.connect()
         depth = kwargs.get('depth', 0)
-        url = '%(base_url)s/command/%(db_name)s/sql/-' % ({
-            'base_url': self._settings['url'],
-            'db_name': self._settings['name']
-        })
-        
+
+        url = self.__url('command', self._settings['name'])
+
         try:
             response = requests.post( url,
-                auth = self._auth, 
+                auth   = self._auth, 
                 params = {
                     'format': 'rid,class,fetchPlan:*:%d' % depth
                 },
-                data = sql)
+                data   = sql)
             return response.json().get('result')
         except requests.exceptions.RequestException as e:
             self._connected = False
             raise exceptions.OrientDBConnectionError("invalid connection (maybe down)")
         except ValueError as e:
             raise exceptions.OrientDBQueryError(response.text)
-            
+
     def disconnect(self):
         if not self._connected:
             return
