@@ -17,28 +17,42 @@ class EdgeDriver(types.BaseEdgeDriver):
         QB.set('type', 'edge')
         
         SQL = QB.result()
+<<<<<<< HEAD
+=======
+        if self.debug:
+            print SQL
+
+>>>>>>> 77111ac1f266907068305892f93caa5d5fe632aa
         response = self.driver.query(SQL)
         res = result.Result(response[0])
         return res
     
     def update(self, typeClass, criteria, data):
         SQL = pqb.Update(typeClass).set(data).where(criteria).result()
+        if self.debug:
+            print SQL
         response = self.driver.query(SQL)
         return response[0]
 
     def search(self, typeClass, query):
         SQL = pqb.Select().from_(typeClass).where('any().toLowerCase()', '%%%s%%' % query, operator='LIKE').result()
+        if self.debug:
+            print SQL
         response = self.driver.query(SQL, 2)
         res = result.ResultSet(response)
         return res
     
     def delete(self, typeClass, criteria):
         SQL = pqb.Delete('EDGE').class_(typeClass).where(criteria).result()
+        if self.debug:
+            print SQL
         response = self.driver.query(SQL)
         return response[0]
 
     def find(self, typeClass, criteria = None, depth = 0):
         SQL = pqb.Select().from_(typeClass).where(criteria).result()
+        if self.debug:
+            print SQL
         response = self.driver.query(SQL, depth=depth)
         res = result.ResultSet(response)
         return res
