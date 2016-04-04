@@ -6,8 +6,14 @@ from ...types import Map
 def Factory(settings, autoConnect=False):
     DriverInstance = driver.DBDriver(settings=settings, autoConnect=autoConnect)
 
+    Vertex = vertex.VertexDriver(DriverInstance)
+    Vertex.debug = bool(settings.get('debug'))
+    
+    Edge = edge.EdgeDriver(DriverInstance)
+    Edge.debug = bool(settings.get('debug'))
+
     return Map({
         'DB': DriverInstance,
-        'Vertex': vertex.VertexDriver(DriverInstance),
-        'Edge': edge.EdgeDriver(DriverInstance),
+        'Vertex': Vertex,
+        'Edge': Edge
     })

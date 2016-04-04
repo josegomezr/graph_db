@@ -10,13 +10,14 @@ class EdgeDriver(types.BaseEdgeDriver):
         if isinstance(to, result.Result):
             to = to.get('@rid')
 
-        SQL = pqb.Create('EDGE').class_(typeClass).set(data).from_(From).to(to)
+        QB = pqb.Create('EDGE').class_(typeClass).set(data).from_(From).to(to)
         uid = uuid.uuid4()
-        SQL.set('uuid', str(uid))
-        SQL.set('suid', "%x" % (uid.fields[0]))
-        SQL.set('type', 'edge')
+        QB.set('uuid', str(uid))
+        QB.set('suid', "%x" % (uid.fields[0]))
+        QB.set('type', 'edge')
         
-        response = self.driver.query(SQL.result())
+        SQL = QB.result()
+        response = self.driver.query(SQL)
         res = result.Result(response[0])
         return res
     
