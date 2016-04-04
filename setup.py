@@ -14,9 +14,9 @@ setup(
     license='Apache Software License',
     author='José Daniel Gómez Rodríguez',
     install_requires=[
-		'requests == 2.7.0',
-		'pqb >= 0.*'
-	],
+        'requests == 2.7.0',
+        'pqb >= 0.*'
+    ],
     author_email='1josegomezr@gmail.com',
     description='GraphDB almacenamiento para grafos en cualquier gestor de base de datos.',
     long_description=long_description,
@@ -24,9 +24,7 @@ setup(
     include_package_data=True,
     platforms='any',
     keywords='graph database grafos',
-    dependency_links=[
-	    'https://github.com/josegomezr/pyqb/archive/master.zip#egg=pyqb'
-	],
+
     # test_suite='graph_db.test.all',
     classifiers = [
         'Programming Language :: Python',
