@@ -17,12 +17,6 @@ class EdgeDriver(types.BaseEdgeDriver):
         QB.set('type', 'edge')
         
         SQL = QB.result()
-<<<<<<< HEAD
-=======
-        if self.debug:
-            print SQL
-
->>>>>>> 77111ac1f266907068305892f93caa5d5fe632aa
         response = self.driver.query(SQL)
         res = result.Result(response[0])
         return res

@@ -10,14 +10,9 @@ class VertexDriver(types.BaseVertexDriver):
         QB.set('uuid', str(uid))
         QB.set('suid', "%x%x" % uid.fields[0:2])
         QB.set('type', 'vertex')
-<<<<<<< HEAD
         QB.set('class', typeClass)
         SQL = QB.result()
-=======
-        SQL = QB.result()
-        if self.debug:
-            print SQL
->>>>>>> 77111ac1f266907068305892f93caa5d5fe632aa
+
         response = self.driver.query(SQL)
         res = result.Result(response[0])
         return res
