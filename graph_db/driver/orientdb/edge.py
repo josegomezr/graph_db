@@ -1,6 +1,7 @@
 import pqb
 from . import result
 from ... import types
+import uuid
 
 class EdgeDriver(types.BaseEdgeDriver):
     def create(self, typeClass, From, to, data = None):
@@ -15,6 +16,7 @@ class EdgeDriver(types.BaseEdgeDriver):
         QB.set('uuid', str(uid))
         QB.set('suid', "%x" % (uid.fields[0]))
         QB.set('type', 'edge')
+        QB.set('class', typeClass)
         
         SQL = QB.result()
         response = self.driver.query(SQL)
