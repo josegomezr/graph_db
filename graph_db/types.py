@@ -20,9 +20,18 @@ class BaseDBDriver():
     """
     _connected = False
     _settings = {}
+
     def _debug(self, *args):
         if self.debug:
-            print ("[GraphDB #%x]: " % id(self), *args)
+            print ("[GraphDB #%x]:" % id(self), *args)
+
+    def _debugOut(self, *args):
+        self._debug("OUT --> ", *args)
+
+    def _debugIn(self, *args):
+        self._debug("IN  <-- ", *args)
+
+
     def __init__(self, settings={}, autoConnect = True):
         self._settings.update(settings)
         if autoConnect:

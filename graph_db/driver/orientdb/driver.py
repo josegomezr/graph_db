@@ -3,9 +3,9 @@ from . import exceptions
 import requests
 
 class DBDriver(types.BaseDBDriver):
-    client = None
-    _connected = False
     def __init__(self, autoConnect = True, settings={}):
+        self._connected = False
+        self._dbSelected = False
         self._settings = settings
         self.debug = self._settings.get('debug', False)
         user = self._settings['user']
@@ -29,8 +29,9 @@ class DBDriver(types.BaseDBDriver):
 
         try:
             url = self.__url('connect', self._settings['name'])
-            self._debug("GET %s" % url)
+            self._debugOut("GET %s" % url)
             response = requests.get(url, auth=self._auth)
+            self._debugIn("[%s]" % response.status_code, response.text)
             if response.status_code == 401:
                 raise exceptions.OrientDBConnectionError("Invalid Credentials")
         except requests.exceptions.RequestException as e:
@@ -44,11 +45,12 @@ class DBDriver(types.BaseDBDriver):
             self.connect()
         try:
             url = self.__url('database', self._settings['name'])
-            self._debug("GET %s" % url)
+            self._debugOut("GET %s" % url)
             response = requests.get(url, auth=self._auth)
+            self._debugIn("[%s]" % response.status_code, response.text)
             if response.status_code == 401:
                 raise exceptions.OrientDBConnectionError("Invalid Database 401 Connection")
-            self._connected = True
+            self._dbSelected = True
         except requests.exceptions.RequestException as e:
             raise exceptions.OrientDBConnectionError("Invalid Database Connection (select-db) (OrientDB may be down)")
 
@@ -57,12 +59,16 @@ class DBDriver(types.BaseDBDriver):
     def query(self, sql, *args, **kwargs):
         if not self._connected:
             self.connect()
+
+        if not self._dbSelected:
+            self.selectDB()
+
         depth = kwargs.get('depth', 0)
 
         url = self.__url('command', self._settings['name'], 'sql')
 
-        self._debug("GET %s" % url)
-        self._debug("POST %s\n--> %s" % (url, sql))
+        self._debugOut("GET %s" % url)
+        self._debugOut("POST %s\n--> %s" % (url, sql))
 
         try:
             response = requests.post( url,
@@ -83,7 +89,7 @@ class DBDriver(types.BaseDBDriver):
             return
         try:
             url = self._settings['url'] + '/disconnect'
-            self._debug("GET %s" % url)
+            self._debugOut("GET %s" % url)
             response = requests.get(url, auth=self._auth)
         except requests.exceptions.RequestException as e:
             raise exceptions.OrientDBConnectionError("Couldn't Disconnect to OrientDB Server")
