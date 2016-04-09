@@ -8,7 +8,7 @@ class VertexDriver(types.BaseVertexDriver):
         QB = pqb.Create('VERTEX').class_(typeClass).set(data)
         uid = uuid.uuid4()
         QB.set('uuid', str(uid))
-        QB.set('suid', "%x%x" % uid.fields[0:2])
+        QB.set('suid', "%x" % uid.fields[0])
         QB.set('type', 'vertex')
         QB.set('class', typeClass)
         SQL = QB.result()
