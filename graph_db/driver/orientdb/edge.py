@@ -5,11 +5,23 @@ import uuid
 
 class EdgeDriver(types.BaseEdgeDriver):
     def create(self, typeClass, From, to, data = None):
-        if isinstance(From, result.Result):
-            From = From.get('@rid')
+        if isinstance(From, dict):
+            if From.get('uuid'):
+                From = pqb.Select().from_(From.get('class', 'V')).where({
+                    'uuid': From.get('uuid')
+                }).result()
+                From = "(%s)" % From
+            else:
+                From = From.get('@rid')
 
-        if isinstance(to, result.Result):
-            to = to.get('@rid')
+        if isinstance(to, dict):
+            if to.get('uuid'):
+                to = pqb.Select().from_(to.get('class', 'V')).where({
+                    'uuid': to.get('uuid')
+                }).result()
+                to = "(%s)" % to
+            else:
+                to = to.get('@rid')
 
         QB = pqb.Create('EDGE').class_(typeClass).set(data).from_(From).to(to)
         uid = uuid.uuid4()

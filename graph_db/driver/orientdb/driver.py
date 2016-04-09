@@ -76,7 +76,8 @@ class DBDriver(types.BaseDBDriver):
                 params = {
                     'format': 'rid,class,fetchPlan:*:%d' % depth
                 },
-                data   = sql)
+                data = sql)
+            self._debugIn(response.text)
             return response.json().get('result')
         except requests.exceptions.RequestException as e:
             self._connected = False

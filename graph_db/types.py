@@ -31,7 +31,6 @@ class BaseDBDriver():
     def _debugIn(self, *args):
         self._debug("IN  <-- ", *args)
 
-
     def __init__(self, settings={}, autoConnect = True):
         self._settings.update(settings)
         if autoConnect:
@@ -227,6 +226,8 @@ class List(list):
             if filtered is not None:
                 newList.append(filtered)
         return newList
+    def __str__(self):
+        return "[%s]" % (', '.join([i.__str__() for i in self]))
 
 class Result(Map):
     def __init__(self, result):
