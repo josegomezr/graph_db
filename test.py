@@ -1,4 +1,25 @@
 import graph_db
+
+dbsettings = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'jose-dev',
+    'name': 'diggi-v1',
+    'port': '2480',
+    # 'debug': True
+}
+
+driver = graph_db.Factory('orientdb', dbsettings)
+amy = driver.Vertex.find({'suid': '8cf4c83a'})[0]
+victor = driver.Vertex.find({'suid': 'f4604d91'})[0]
+amigo = driver.Edge.find({'suid': '22451cf2'})[0]
+
+print ("result:")
+print (amigo)
+
+driver.disconnect()
+
+'''
 import unittest
 
 class OrientDBTestCase(unittest.TestCase):
@@ -72,7 +93,7 @@ class OrientDBTestCase(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
-'''
+#
 
 amy = driver.Vertex.create('V')
 

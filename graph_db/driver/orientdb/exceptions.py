@@ -1,12 +1,12 @@
-from ... import types
+from ... import exceptions
 
-class OrientDBException(types.GraphDBException):
+class OrientDBException(exceptions.GraphDBError):
     pass
 
-class OrientDBConnectionError(types.GraphDBException):
+class OrientDBConnectionError(OrientDBException, exceptions.GraphDBConectionError):
     pass
 
-class OrientDBQueryError(types.GraphDBException):
+class OrientDBQueryError(exceptions.GraphDBQueryError):
     def __init__(self, message, *args):
         exeptionPath = 'com.orientechnologies.orient.core.exception'
         start = message.find(exeptionPath)

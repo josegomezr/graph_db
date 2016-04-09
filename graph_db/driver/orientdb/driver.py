@@ -1,9 +1,11 @@
 from ... import types
 from . import exceptions
+from . import edge
+from . import vertex
 import requests
 
 class DBDriver(types.BaseDBDriver):
-    def __init__(self, autoConnect = True, settings={}):
+    def __init__(self, settings={}):
         self._connected = False
         self._dbSelected = False
         self._settings = settings
@@ -13,10 +15,13 @@ class DBDriver(types.BaseDBDriver):
         self._auth = requests.auth.HTTPBasicAuth(user, password)
 
         self._settings['url'] = 'http://%s:%s' % (self._settings['host'], str(self._settings['port']))
-
-        if autoConnect:
+        
+        if self._settings.get('auto_connect'):
             self.connect()
             self.selectDB()
+
+        self.Vertex = vertex.VertexDriver(self)
+        self.Edge = edge.EdgeDriver(self)
 
     def __url(self, *args):
         segments = [self._settings['url']]
@@ -67,8 +72,7 @@ class DBDriver(types.BaseDBDriver):
 
         url = self.__url('command', self._settings['name'], 'sql')
 
-        self._debugOut("GET %s" % url)
-        self._debugOut("POST %s\n--> %s" % (url, sql))
+        self._debugOut("POST %s" % url, "\n    --> %s" % ( sql))
 
         try:
             response = requests.post( url,
@@ -94,4 +98,5 @@ class DBDriver(types.BaseDBDriver):
             response = requests.get(url, auth=self._auth)
         except requests.exceptions.RequestException as e:
             raise exceptions.OrientDBConnectionError("Couldn't Disconnect to OrientDB Server")
-        self._connected = False
+        self._connected = self._dbSelected = False
+        return self

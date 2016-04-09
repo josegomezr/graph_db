@@ -1,58 +1,65 @@
 import pqb
-from . import result
 from ... import types
+from . import exceptions
+from . import utils
 import uuid
 
 class EdgeDriver(types.BaseEdgeDriver):
-    def create(self, typeClass, From, to, data = None):
-        if isinstance(From, dict):
-            if From.get('uuid'):
-                From = pqb.Select().from_(From.get('class', 'V')).where({
-                    'uuid': From.get('uuid')
-                }).result()
-                From = "(%s)" % From
-            else:
-                From = From.get('@rid')
+    def create(self, from_, to, data = {}):
+        eType = data.get('class', 'E')
+        
+        QB = pqb.Select()
+        if isinstance(from_, dict):
+            from_Class, from_Value = from_.get('class', 'V'), from_.get('uuid')
+        elif utils.validate_uuid4(from_):
+            from_Class, from_Value = 'V', from_
+        else:
+            raise ValueError ('Unrecognizable Vertex Reference [%s]' % from_)
 
+        from_ = "(%s)" % QB.from_(from_Class).where({
+            'uuid': from_Value
+        }).result()
+       
+        QB = pqb.Select()
         if isinstance(to, dict):
-            if to.get('uuid'):
-                to = pqb.Select().from_(to.get('class', 'V')).where({
-                    'uuid': to.get('uuid')
-                }).result()
-                to = "(%s)" % to
-            else:
-                to = to.get('@rid')
+            toClass, toValue = to.get('class', 'V'), to.get('uuid')
+        elif utils.validate_uuid4(to):
+            toClass, toValue = 'V', to
+        else:
+            raise ValueError ('Unrecognizable Vertex Reference [%s]' % to)
 
-        QB = pqb.Create('EDGE').class_(typeClass).set(data).from_(From).to(to)
+        to = "(%s)" % QB.from_(toClass).where({
+            'uuid': toValue
+        }).result()
+
+        QB = pqb.Create('EDGE').class_(eType).set(data).from_(from_).to(to)
         uid = uuid.uuid4()
         QB.set('uuid', str(uid))
         QB.set('suid', "%x" % (uid.fields[0]))
         QB.set('type', 'edge')
-        QB.set('class', typeClass)
+        QB.set('class', eType)
         
         SQL = QB.result()
         response = self.driver.query(SQL)
-        res = result.Result(response[0])
+        res = response[0]
         return res
     
-    def update(self, typeClass, criteria, data):
-        SQL = pqb.Update(typeClass).set(data).where(criteria).result()
+    def update(self, criteria = {}, data = {}):
+        eType = criteria.get('class', 'E')
+        SQL = pqb.Update(eType).set(data).where(criteria).result()
         response = self.driver.query(SQL)
         return response[0]
 
-    def search(self, typeClass, query):
-        SQL = pqb.Select().from_(typeClass).where('any().toLowerCase()', '%%%s%%' % query, operator='LIKE').result()
-        response = self.driver.query(SQL, 2)
-        res = result.ResultSet(response)
-        return res
-    
-    def delete(self, typeClass, criteria):
-        SQL = pqb.Delete('EDGE').class_(typeClass).where(criteria).result()
+    def delete(self, eType, criteria = {}):
+        eType = criteria.get('class', 'E')
+        SQL = pqb.Delete('EDGE').class_(eType).where(criteria).result()
         response = self.driver.query(SQL)
         return response[0]
 
-    def find(self, typeClass, criteria = None, depth = 0):
-        SQL = pqb.Select().from_(typeClass).where(criteria).result()
+    def find(self, criteria = {}, **kwargs):
+        depth = kwargs.get('depth', 0)
+        eType = criteria.get('class', 'E')
+        SQL = pqb.Select().from_(eType).where(criteria).result()
         response = self.driver.query(SQL, depth=depth)
-        res = result.ResultSet(response)
+        res = response
         return res

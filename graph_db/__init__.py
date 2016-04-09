@@ -1,35 +1,21 @@
 """
 GraphDB
 
-Almacenamiento para Grafos
+Graph Storage and Query
 
-Propiedades
------------
-current_connection -- Caché de la última conexión realizada
-connections -- Caché de las conexiones realizadas
+@todo cache pool of connections
 """
 
 import importlib
-from . import types
+from . import exceptions
 
-current_connection = None
-connections = types.Map()
-
-def Factory(driver, settings=None, autoConnect=False):
+def Factory(driver, *args, **kwargs):
     """
-    Factory(driver_name, settings) -> DriverPackage
+    Factory(driver_name, settings) -> Driver
 
     Genera instancias para cada driver de GraphDB
     """
     driverModule = importlib.import_module('.driver.' + driver, __package__)
-    connId = "%s-%s:%s" % (driver, settings['host'], settings['port'])
-
-    if not connections.get(connId, False):
-        if len(settings) == 0:
-            raise ValueError("db: config needed")
-        currentFactory = driverModule.Factory(settings, autoConnect)
-        connections[connId] = current_connection = currentFactory
-
-    return connections[connId]
+    return driverModule.Factory(*args, **kwargs)
 
 __version__ = '0.0.13'
