@@ -2,19 +2,19 @@ import graph_db
 
 dbsettings = {
     'host': 'localhost',
-    'user': 'root',
-    'password': 'jose-dev',
-    'name': 'diggi-v1',
-    'port': '2480',
-    # 'debug': True
+    'user': 'test',
+    'password': 'test',
+    'name': 'test',
+    'port': 27019,
+    'debug': True
 }
 
-driver = graph_db.Factory('orientdb', dbsettings)
-amy = driver.Vertex.find({'suid': '8cf4c83a'})[0]
-victor = driver.Vertex.find({'suid': 'f4604d91'})[0]
-amigo = driver.Edge.find({'suid': '22451cf2'})[0]
+driver = graph_db.Factory('mongodb', dbsettings)
+a = driver.Vertex.find()
+b = driver.Vertex.find({'suid': '934dfbf2'})[0]
 
-print ("result:")
+amigo = driver.Edge.create(a, b, {'kek': 'foo'})
+
 print (amigo)
 
 driver.disconnect()
