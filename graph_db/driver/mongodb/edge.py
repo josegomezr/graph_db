@@ -33,8 +33,8 @@ class EdgeDriver(types.BaseEdgeDriver):
 
         result = self.driver.query('edge').insert_one(edge)
         
-        vertex.VertexDriver(self.driver).update({'uuid': from_Value}, {'out_%s' % edge['class']: edge['uuid']}, mode='$addToSet')
-        vertex.VertexDriver(self.driver).update({'uuid': toValue}, {'in_%s' % edge['class']: edge['uuid']}, mode='$addToSet')
+        # vertex.VertexDriver(self.driver).update({'uuid': from_Value}, {'out_%s' % edge['class']: edge['uuid']}, mode='$addToSet')
+        # vertex.VertexDriver(self.driver).update({'uuid': toValue}, {'in_%s' % edge['class']: edge['uuid']}, mode='$addToSet')
 
         return edge
     
