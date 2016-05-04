@@ -25,8 +25,8 @@ class EdgeDriver(types.BaseEdgeDriver):
         else:
             raise ValueError ('Unrecognizable Vertex Reference [%s]' % to)
 
-        edge['in'] = from_Value
-        edge['out'] = toValue
+        edge['out'] = from_Value
+        edge['in'] = toValue
         edge['type'] =  'edge'
         edge['class'] = data.get('class', 'E')
 

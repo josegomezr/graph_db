@@ -10,10 +10,16 @@ dbsettings = {
 }
 
 driver = graph_db.Factory('mongodb', dbsettings)
-a = driver.Vertex.find()
-b = driver.Vertex.find({'suid': '934dfbf2'})[0]
 
-amigo = driver.Edge.create(a, b, {'kek': 'foo'})
+a = driver.Vertex.find({
+	'uuid' : 'c65d57d6-4d0a-4ed4-8e37-0386a45f9389'
+})[0]
+
+b = driver.Vertex.find({
+	'uuid' : 'fe0100f8-c504-4566-86e8-bc88887c6029'
+})[0]
+
+amigo = driver.Edge.create(a, b, {'bar': 'baz'})
 
 print (amigo)
 

@@ -8,7 +8,9 @@ class VertexDriver(types.BaseVertexDriver):
         uid = uuid.uuid4()
         vertex['uuid'] = vertex['_id'] =  str(uid)
         vertex['suid'] =  "%x" % (uid.fields[0])
+        vertex['class'] =  data.get('class', 'V')
         vertex['type'] =  'vertex'
+        vertex['data'] = data
         result = self.driver.query('vertex').insert_one(vertex)
         return vertex
     
