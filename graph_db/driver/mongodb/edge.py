@@ -49,5 +49,7 @@ class EdgeDriver(types.BaseEdgeDriver):
         return result
     
     def find(self, criteria = {}):
+        criteria = {k: v for k, v in criteria.items() if v is not None}
+        # print ("called", criteria)
         criteria.update({'type': 'edge'})
         return [i for i in self.driver.query('edge').find(criteria)]
