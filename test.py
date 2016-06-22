@@ -1,29 +1,47 @@
+import unittest
 import graph_db
+from unittest.mock import MagicMock, patch
 
-dbsettings = {
-    'host': 'localhost',
-    'user': 'test',
-    'password': 'test',
-    'name': 'test',
-    'port': 27019,
-    'debug': True
-}
+class OrientDBTestCase(unittest.TestCase):
+    """Orient Test Case"""
 
-driver = graph_db.Factory('mongodb', dbsettings)
+    def setUp(self):
+        dbsettings = {
+            'host': 'localhost',
+            'user': 'root',
+            'password': 'veca3150',
+            'name': 'diggi-v1',
+            'port': '2480'
+        }
+        self.driver = graph_db.Factory('orientdb', dbsettings)
+    
+    def test_it_should_connect(self):
+        pass
 
-a = driver.Vertex.find({
-	'uuid' : 'c65d57d6-4d0a-4ed4-8e37-0386a45f9389'
-})[0]
+# dbsettings = {
+#     'host': 'localhost',
+#     'user': 'test',
+#     'password': 'test',
+#     'name': 'test',
+#     'port': 27019,
+#     'debug': True
+# }
 
-b = driver.Vertex.find({
-	'uuid' : 'fe0100f8-c504-4566-86e8-bc88887c6029'
-})[0]
+# driver = graph_db.Factory('mongodb', dbsettings)
 
-amigo = driver.Edge.create(a, b, {'bar': 'baz'})
+# a = driver.Vertex.find({
+# 	'uuid' : 'c65d57d6-4d0a-4ed4-8e37-0386a45f9389'
+# })[0]
 
-print (amigo)
+# b = driver.Vertex.find({
+# 	'uuid' : 'fe0100f8-c504-4566-86e8-bc88887c6029'
+# })[0]
 
-driver.disconnect()
+# amigo = driver.Edge.create(a, b, {'bar': 'baz'})
+
+# print (amigo)
+
+# driver.disconnect()
 
 '''
 import unittest

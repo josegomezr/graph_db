@@ -8,6 +8,7 @@ Graph Storage and Query
 
 import importlib
 from . import exceptions
+from . import driver
 
 def Factory(driver, *args, **kwargs):
     """

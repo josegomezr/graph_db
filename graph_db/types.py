@@ -5,7 +5,8 @@ class BaseDBDriver():
     """
     _connected = False
     _settings = {}
-
+    def __init__(self, dbapi):
+        self.dbapi = dbapi
     def _debug(self, *args):
         if self.debug:
             print ("[GraphDB #%x]:" % id(self), *args)

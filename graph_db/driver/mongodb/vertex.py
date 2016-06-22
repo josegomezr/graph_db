@@ -1,4 +1,3 @@
-import pqb
 import uuid
 from ... import types
 
@@ -10,7 +9,7 @@ class VertexDriver(types.BaseVertexDriver):
         vertex['suid'] =  "%x" % (uid.fields[0])
         vertex['class'] =  data.get('class', 'V')
         vertex['type'] =  'vertex'
-        vertex['data'] = data
+        vertex['data'] = data.get('data', {})
         result = self.driver.query('vertex').insert_one(vertex)
         return vertex
     

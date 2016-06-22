@@ -2,10 +2,11 @@ from ... import types
 from . import exceptions
 from . import edge
 from . import vertex
-from pymongo import MongoClient
 
 class DBDriver(types.BaseDBDriver):
-    def __init__(self, settings={}):
+    def __init__(self, dbapi, settings={}):
+        super(DBDriver, self).__init__(dbapi)
+
         self._settings = settings
         self._settings['url'] = 'mongodb://%s:%s/%s' % (
             self._settings['host'], 
@@ -18,7 +19,7 @@ class DBDriver(types.BaseDBDriver):
     def connect(self):
         if self._connected:
             return
-        self.client = MongoClient()
+        self.client = self.dbapi.MongoClient()
         self.db = self.client[self._settings['name']]
         return self
 

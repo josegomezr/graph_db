@@ -30,6 +30,7 @@ class EdgeDriver(types.BaseEdgeDriver):
         edge['type'] =  'edge'
         edge['class'] = data.get('class', 'E')
 
+        edge['data'] = data.get('data', {})
 
         result = self.driver.query('edge').insert_one(edge)
         
