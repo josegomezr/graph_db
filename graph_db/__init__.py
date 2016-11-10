@@ -19,4 +19,4 @@ def Factory(driver, *args, **kwargs):
     driverModule = importlib.import_module('.driver.' + driver, __package__)
     return driverModule.Factory(*args, **kwargs)
 
-__version__ = '0.0.13'
+__version__ = '0.0.14'
