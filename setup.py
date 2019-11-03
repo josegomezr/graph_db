@@ -14,7 +14,7 @@ setup(
     license='Apache Software License',
     author='José Daniel Gómez Rodríguez',
     install_requires=[
-        'requests == 2.7.0',
+        'requests == 2.20.0',
         'pqb >= 0.0.1',
         'pymongo >= 3.3.0'
     ],
